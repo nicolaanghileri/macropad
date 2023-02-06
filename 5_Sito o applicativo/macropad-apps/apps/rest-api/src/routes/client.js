@@ -23,3 +23,5 @@ router.get(mainRoute, (req,res) => {
 router.post(mainRoute, (res, req) => {
     
 });
+
+export default router;

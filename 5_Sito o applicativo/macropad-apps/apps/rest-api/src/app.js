@@ -4,10 +4,17 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
-import caneRouter from './routes/cane.js' //perchè usiamo import / export nuovo
 
+//import all routes from ./routes/...
+import caneRouter from './routes/cane.js'; //perchè usiamo import / export nuovo
+import appRouter from './routes/app.js';
+import clientRouter from './routes/client.js';
+import userRouter from './routes/user.js';
+
+//Environment configuration
 dotenv.config();
 
+//Initialize
 const app = express();
 const {BASE_URL} = process.env; //da usare come lista, basta aggiungere alle parentes
 
@@ -33,16 +40,12 @@ app.use(
 
 
 app.use(BASE_URL, caneRouter); // /api/v1/cane
-
+app.use(BASE_URL, appRouter);
+app.use(BASE_URL, clientRouter);
+app.use(BASE_URL, userRouter);
 
 //routes + routers
-app.get(`${BASE_URL}/test`, (_, res) => {
-    res.status(200).json({
-      message: 'OK VALSA!',
-    });
-});
-
-app.use(morgan());
+//app.use(morgan());
 
 export default app;
 
