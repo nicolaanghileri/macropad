@@ -23,4 +23,28 @@ router.post(mainRoute, async (req,res) => {
     res.end();
 });
 
+router.get(mainRoute, async (req, res) =>{
+  //Parsing del body http
+  let email = req.body.email;
+  let passwordClear = req.body.password;
+
+  //retrieve user information from db
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email,
+    },
+  })
+
+  //Check if credentials are right
+  bcrypt.compare(passwordClear, user.password, function(err, result) {
+    if(result){
+      res.status(200);
+      res.end();
+    }
+    res.status(400);
+    res.end();
+  });
+});
+
+
 export default router;

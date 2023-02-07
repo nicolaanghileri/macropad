@@ -6,9 +6,6 @@ import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
-import caneRouter from './routes/cane.js'; //perchè usiamo import / export nuovo
-import appRouter from './routes/app.js';
-import clientRouter from './routes/client.js';
 import userRouter from './routes/user.js';
 
 //Environment configuration
@@ -39,9 +36,6 @@ app.use(
 // ... (mid per i log / autenticazione)
 
 
-app.use(BASE_URL, caneRouter); // /api/v1/cane
-app.use(BASE_URL, appRouter);
-app.use(BASE_URL, clientRouter);
 app.use(BASE_URL, userRouter);
 
 //routes + routers
