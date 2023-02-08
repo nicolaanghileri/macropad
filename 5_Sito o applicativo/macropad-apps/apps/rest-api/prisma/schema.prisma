@@ -20,10 +20,10 @@ model User {
 model Macro {
   id         Int             @id @default(autoincrement())
   nome       String?         @db.VarChar(25)
-  createdAt  DateTime?       @db.Timestamp(0)
+  createdAt  DateTime        @default(now()) @db.Timestamp(0)
   version    Int?            @db.TinyInt
   app_id     Int?
-  app        App?            @relation(fields: [app_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "macro_ibfk_1")
+  app        App?            @relation(fields: [app_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "macro_ibfk_1")
   user_macro MacrosOnUsers[]
 
   @@index([app_id], map: "app_id")
@@ -33,8 +33,8 @@ model Macro {
 model MacrosOnUsers {
   user_id  Int
   macro_id Int
-  user     User  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_macro_ibfk_1")
-  macro    Macro @relation(fields: [macro_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_macro_ibfk_2")
+  user     User  @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_macro_ibfk_1")
+  macro    Macro @relation(fields: [macro_id], references: [id], onUpdate: Restrict, map: "user_macro_ibfk_2")
 
   @@id([user_id, macro_id])
   @@index([macro_id], map: "macro_id")
@@ -51,32 +51,22 @@ model App {
 }
 
 model Device {
-  id        Int       @id @default(autoincrement())
-  name      String?   @db.VarChar(25)
-  status_id Int?
-  api_keys  Api_keys?
-  status    Status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "device_ibfk_1")
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(25)
+  status      String?   @db.VarChar(25)
+  api_keys_id Int?      @unique(map: "api_keys_id")
+  api_keys    Api_keys? @relation(fields: [api_keys_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "device_ibfk_2")
 
-  @@index([status_id], map: "status_id")
   @@map("device")
 }
 
-model Status {
-  id     Int      @id @default(autoincrement())
-  value  String?  @db.VarChar(25)
-  device Device[]
-
-  @@map("status")
-}
-
 model Api_keys {
-  id        Int       @id @default(autoincrement())
-  api_key   String?   @db.VarChar(128)
-  createdAt DateTime? @db.Timestamp(0)
+  id        Int      @id @default(autoincrement())
+  api_key   String?  @db.VarChar(128)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
   user_id   Int?
-  device_id Int?      @unique(map: "device_id")
-  user      User?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "api_keys_ibfk_1")
-  device    Device?   @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "api_keys_ibfk_2")
+  user      User?    @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "api_keys_ibfk_1")
+  device    Device?
 
   @@index([user_id], map: "user_id")
   @@map("api_keys")
