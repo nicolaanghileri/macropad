@@ -20,6 +20,13 @@
   "engines": {
     "node": ">=14.0.0"
   },
+<<<<<<< Updated upstream:macropad-apps/package.json
   "dependencies": {},
+=======
+  "dependencies": {
+    "create-react-app": "^5.0.1",
+    "yarn": "^1.22.19"
+  },
+>>>>>>> Stashed changes:5_Sito o applicativo/macropad-apps/package.json
   "packageManager": "yarn@1.22.19"
 }
