@@ -1,11 +1,8 @@
 import { Navbar } from '@mantine/core';
 import Bar from './Bar';
 
-
-
 function Nav(props) {
-    const username = props.username || 'default username';
-
+  const username = props.username || 'not logged';
 
   return (
       <>

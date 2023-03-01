@@ -1,6 +1,5 @@
 import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
-import genAPIKey from "./apiAuth";
 import bcrypt from 'bcrypt';
 
 
@@ -174,5 +173,5 @@ export {
     createDevice,
     updateDeviceStatus,
     userExists,
-    createUser,
+    createUser
 }

@@ -39,8 +39,13 @@ export function Login(props) {
   const onInput = values => {
     const {email, password}= values;
     
-    axios.post('http://localhost:3001/api/')
-
+    axios.get('http://localhost:3001/api/v1/').then(res =>{
+      if(res.data.success){
+        console.log("Success for login");
+      }else{
+        console.log("Failed for login");
+      }
+    })
   }
 
 
@@ -48,10 +53,8 @@ export function Login(props) {
     <Center>
       <Paper shadow="xs" radius="xs" p="xl" withBorder {...props}>
         <Text size="lg" weight={500}>
-          Welcome to Macropad! {type} :
+          Macropad {type} :
         </Text>
-
-        <Divider labelPosition="center" my="lg" />
 
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>

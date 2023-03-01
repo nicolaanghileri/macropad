@@ -1,29 +1,36 @@
-import {Router} from 'express';
-import bcrypt from 'bcrypt';
+import { Router } from "express";
+import bcrypt from "bcrypt";
+import { PrismaClient } from "@prisma/client";
+import {
+  validatePackage,
+  isFirstContact,
+  createDevice,
+  updateDeviceStatus,
+  userExists,
+  createUser,
+} from "../utils/connector.js";
 
-import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
-
 const router = Router();
-const mainRoute = '/user';
+const mainRoute = "/user";
 
-router.post(mainRoute, async (req,res) => {
-    //parsing of all the informations
-    let password = req.body.password;
-    let email = req.body.email;
-    //Hash and store into db
-    bcrypt.hash(password, 10, async (err, hash) => {
-        const user = await prisma.user.create({
-            data: {
-              email: email,
-              password: hash,
-            },
-          })
+router.post(mainRoute, async (req, res) => {
+  //parsing of all the informations
+  let password = req.body.password;
+  let email = req.body.email;
+  //Hash and store into db
+  bcrypt.hash(password, 10, async (err, hash) => {
+    const user = await prisma.user.create({
+      data: {
+        email: email,
+        password: hash,
+      },
     });
-    res.end();
+  });
+  res.end();
 });
 
-router.get(mainRoute, async (req, res) =>{
+router.get(mainRoute, async (req, res) => {
   //Parsing del body http
   let email = req.body.email;
   let passwordClear = req.body.password;
@@ -33,11 +40,11 @@ router.get(mainRoute, async (req, res) =>{
     where: {
       email: email,
     },
-  })
+  });
 
   //Check if credentials are right
-  bcrypt.compare(passwordClear, user.password, function(err, result) {
-    if(result){
+  bcrypt.compare(passwordClear, user.password, function (err, result) {
+    if (result) {
       res.status(200);
       res.end();
     }
@@ -45,6 +52,5 @@ router.get(mainRoute, async (req, res) =>{
     res.end();
   });
 });
-
 
 export default router;
