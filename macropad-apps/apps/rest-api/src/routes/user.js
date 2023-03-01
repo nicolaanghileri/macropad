@@ -4,8 +4,6 @@ import bcrypt from 'bcrypt';
 import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
 
-import {userExists, createUser} from '../utils/connector.js';
-
 const router = Router();
 const mainRoute = '/user';
 
@@ -13,13 +11,15 @@ router.post(mainRoute, async (req,res) => {
     //parsing of all the informations
     let password = req.body.password;
     let email = req.body.email;
-    //Check if user already exists
-    if(!userExists(email)) {
-      //Create new users
-      //Hash and store into db
-      createUser(email,password);
-    }
-
+    //Hash and store into db
+    bcrypt.hash(password, 10, async (err, hash) => {
+        const user = await prisma.user.create({
+            data: {
+              email: email,
+              password: hash,
+            },
+          })
+    });
     res.end();
 });
 
@@ -33,7 +33,7 @@ router.get(mainRoute, async (req, res) =>{
     where: {
       email: email,
     },
-  });
+  })
 
   //Check if credentials are right
   bcrypt.compare(passwordClear, user.password, function(err, result) {
