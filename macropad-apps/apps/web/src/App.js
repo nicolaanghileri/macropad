@@ -32,29 +32,14 @@ function App() {
   return (
     <div>
       <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-      
-      <AppShell
-        navbar={<Nav></Nav>
-        
-        
-        }
-        
-        
-        >
-        <Route path="/sharings" component={Sharing}></Route>
-        <Route path="/mymacro" component={LoginForm}>My macros</Route>
-        <Route path="/myaccount" component={LoginForm}>My Account</Route>
-        <Route path="/dashboard" component={LoginForm} >Macro Dashboard</Route>
-      
-      </AppShell>
- 
-
-      
-
+        <AppShell navbar={<Nav></Nav>}>
+          <Route path="/sharings" component={Sharing}>Sharing</Route>
+          <Route path="/mymacro" component={LoginForm}>My macros</Route>
+          <Route path="/myaccount" component={LoginForm}>My Account</Route>
+          <Route path="/dashboard" component={LoginForm} >Macro Dashboard</Route>
+        </AppShell>
       </MantineProvider>
-
     </div>
-
   );
 }
 

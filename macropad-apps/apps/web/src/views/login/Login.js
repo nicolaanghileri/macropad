@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect, useContext } from 'react';
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
@@ -15,14 +16,13 @@ import {
   Center,
 } from "@mantine/core";
 
-import axios from "axios";
+import axios from "../../api/axios";
 
 export function Login(props) {
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
       password: "",
       terms: true,
     },
@@ -36,18 +36,29 @@ export function Login(props) {
     },
   });
 
-  const onInput = values => {
-    const {email, password}= values;
-    
-    axios.get('http://localhost:3001/api/v1/').then(res =>{
-      if(res.data.success){
-        console.log("Success for login");
-      }else{
-        console.log("Failed for login");
-      }
-    })
-  }
+  const [email, setUser] = useState('');
+  const [pwd, setPwd] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false);
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+
+    try {
+      const response = await axios.post("test",
+        JSON.stringify({email, pwd }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+    );
+      console.log(JSON.stringify(response?.data));
+
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <Center>
@@ -56,7 +67,7 @@ export function Login(props) {
           Macropad {type} :
         </Text>
 
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={submitHandler}>
           <Stack>
             {type === "register" && (
               <TextInput
@@ -72,7 +83,7 @@ export function Login(props) {
             <TextInput
               required
               label="Email"
-              placeholder="hello@mantine.dev"
+              placeholder="john@zillo.ch"
               value={form.values.email}
               onChange={(event) =>
                 form.setFieldValue("email", event.currentTarget.value)
