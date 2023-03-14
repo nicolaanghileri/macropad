@@ -1,10 +1,56 @@
 import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
-import genAPIKey from "./apiAuth";
 import bcrypt from 'bcrypt';
+import { generateApiKey } from 'generate-api-key';
+
+/*---------------- Finished ------------------*/
+
+//Public
+const createUser = async(email, password) => {
+    //Creation of a new user with hashed password
+    bcrypt.hash(password, 10, async (err, hash) => {
+        const user = await prisma.user.create({
+            data: {
+                email: email,
+                password: hash
+            },
+        });
+
+        //Selection of the user
+        const createdUser = await prisma.user.findUnique({
+            where: {email: email},
+        })
+
+        //Creation of an API key with user_id
+        await newUserKey(createdUser.id);
+        
+    });  
+};
+
+//Private
+const newUserKey = async(user_id) => {
+    //String generation 32 chars
+    const key = generateApiKey();
+    //Inserting the API Key into the database
+    await prisma.api_keys.create({
+        data: {
+            api_key: key,
+            user_id: user_id
+        }
+    })
+};
+
+//Public 
+const checkLogin = async(email, password) => {
+    const user = await prisma.user.findUnique({
+        where: {email: email},
+    });
+
+    return await bcrypt.compare(password, user.password);
+}
 
 
-
+/*---------------- Developing ------------------*/
 const getApiKeyIdFromKey = async(api_key) => {
     let key_id;
     try{
@@ -25,7 +71,7 @@ const getApiKeyInDeviceFromApiKey = async(api_key) => {
     try{
         device = await prisma.device.findFirst({
             where: {
-                api_keys_id: getApiKeyIdFromKey(api_key),
+                api_keys_id: await getApiKeyIdFromKey(api_key),
             },
         });
     } catch(e){
@@ -52,15 +98,8 @@ const getKeyIdFromDevice = async(device) => {
 };
 
 //Public 
-const validatePackage = async(api_key, device) => {
-    try{
-        if(getKeyIdFromDevice(device) === getApiKeyIdFromKey(api_key)) {
-            return true;
-        }
-    } catch(e){
-        
-    }
-    return false;
+const validatePackage = async (apiKey, device) => {
+    return (await getKeyIdFromDevice(device) === await getApiKeyIdFromKey(apiKey));
 };
 
 //Public 
@@ -68,7 +107,7 @@ const validatePackage = async(api_key, device) => {
 // Use after validatePackage()
 const updateDeviceStatus = async(api_key, status) => {
     try{
-        const update = prisma.device.update({
+        const update = await prisma.device.update({
             where: {
                 name:{
                     api_keys_id: api_key,
@@ -101,7 +140,7 @@ const isFirstContact = async(device_name) => {
     } catch(e){
         console.log(e);
     }
-}; 
+};
 
 //public
 const createDevice = async(device_name, api_key) => {
@@ -111,7 +150,7 @@ const createDevice = async(device_name, api_key) => {
             data: {
                 name: device_name,
                 status: "",
-                api_keys_id: getApiKeyIdFromKey(api_key).id,
+                api_keys_id: await getApiKeyIdFromKey(api_key).id,
             }
         }); 
         console.log("Entrato metodo");
@@ -122,7 +161,7 @@ const createDevice = async(device_name, api_key) => {
 };
 
 const userExists = async(email) => {
-    let user = prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
         where: {
             email: email,
         }
@@ -144,35 +183,8 @@ const getUserFromUsername = async(username) => {
 };
 
 
-const createUser = async(email, password) => {
-    bcrypt.hash(password, 10, async (err, hash) => {
-        const user = await prisma.user.create({
-            data: {
-              email: email,
-              password: hash,
-            },
-        });
-    });
-    let api_key = getAPIKey();
-    while(getApiKeyIdFromKey(api_key) != null){
-        api_key = getAPIKey();
-    }
-
-    const key = await prisma.api_keys.create({
-        data:{
-            api_key: api_key,
-            user_id: (await getUserFromUsername()).id,
-        },  
-    });
-};
-
-
 
 export {
-    validatePackage, 
-    isFirstContact,
-    createDevice,
-    updateDeviceStatus,
-    userExists,
     createUser,
+    checkLogin
 }
