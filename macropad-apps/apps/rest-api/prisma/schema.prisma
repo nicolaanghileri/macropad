@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id         Int             @id @default(autoincrement())
-  email      String?         @db.VarChar(319)
+  email      String?         @db.VarChar(319) @unique
   password   String?         @db.VarChar(64)
   api_keys   Api_keys[]
   user_macro MacrosOnUsers[]
@@ -62,7 +62,7 @@ model Device {
 
 model Api_keys {
   id        Int      @id @default(autoincrement())
-  api_key   String?  @db.VarChar(128)
+  api_key   String?  @db.VarChar(32)
   createdAt DateTime @default(now()) @db.Timestamp(0)
   user_id   Int?
   user      User?    @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "api_keys_ibfk_1")

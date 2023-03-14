@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
-import userRouter from './routes/user.js';
+import userRouter from './routes/auth.js';
 import testRouter from './routes/test.js';
 
 //Environment configuration
@@ -25,7 +25,6 @@ if(BASE_URL == undefined) {
 console.log("BASEURL: " + BASE_URL);
 
 //middlewares
-/*
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -33,13 +32,6 @@ app.use(
     extended: true,
   })
 );
-*/
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
 
 
 // tuoi middlewares

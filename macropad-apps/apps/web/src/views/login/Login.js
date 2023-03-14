@@ -46,8 +46,9 @@ export function Login(props) {
 
 
     try {
+      console.log(email, pwd);
       const response = await axios.post("test",
-        JSON.stringify({email, pwd }),
+        JSON.stringify(form.values.email, form.values.password),
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
@@ -64,7 +65,7 @@ export function Login(props) {
     <Center>
       <Paper shadow="xs" radius="xs" p="xl" withBorder {...props}>
         <Text size="lg" weight={500}>
-          Macropad {type} :
+          Macropad {type}:
         </Text>
 
         <form onSubmit={submitHandler}>
@@ -85,6 +86,7 @@ export function Login(props) {
               label="Email"
               placeholder="john@zillo.ch"
               value={form.values.email}
+              id="email"
               onChange={(event) =>
                 form.setFieldValue("email", event.currentTarget.value)
               }
@@ -96,6 +98,7 @@ export function Login(props) {
               label="Password"
               placeholder="Your password"
               value={form.values.password}
+              id="password"
               onChange={(event) =>
                 form.setFieldValue("password", event.currentTarget.value)
               }
@@ -104,16 +107,6 @@ export function Login(props) {
                 "Password should include at least 6 characters"
               }
             />
-
-            {type === "register" && (
-              <Checkbox
-                label="I accept terms and conditions"
-                checked={form.values.terms}
-                onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
-                }
-              />
-            )}
           </Stack>
 
           <Group position="apart" mt="xl">
