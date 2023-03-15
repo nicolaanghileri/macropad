@@ -1,5 +1,4 @@
 import { Router } from "express";
-import bcrypt from "bcrypt";
 import {
   checkLogin,
   createUser,
@@ -10,7 +9,8 @@ const mainRoute = "/user";
 
 //Working route for user login
 // TODO - Logging and response statuses
-router.get(mainRoute, async (req, res) => {
+router.post(mainRoute, async (req, res) => {
+  console.log(req.body.email, req.body.password);
   if(!req.body.email || !req.body.password){
     res.status(400).json({message: "Uncomplete request"});
   }
@@ -28,16 +28,18 @@ router.get(mainRoute, async (req, res) => {
 
 //Working route for user + api_key creation
 // TODO - Logging and response statuses
+
+/*
 router.post(mainRoute, async (req, res) => {
   if(!req.body.email || !req.body.password){ 
     res.status(400).json({message: "Uncomplete request"});
   }
   try{
-    createUser(req.body.email, req.body.password);
+    await createUser(req.body.email, req.body.password);
     res.status(200).json({message: "Successfully created user"});
   }catch(err){
     res.status(400).json({message: err});
   }
 });
-
+*/
 export default router;

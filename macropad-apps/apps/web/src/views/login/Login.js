@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from "react";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 
 import axios from "../../api/axios";
+const LOGIN_URL = "user";
 
 export function Login(props) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -36,30 +37,55 @@ export function Login(props) {
     },
   });
 
-  const [email, setUser] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [errMsg, setErrMsg] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPwd] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (e) => {
+    //e.preventDefault();
 
     try {
-      console.log(email, pwd);
-      const response = await axios.post("test",
-        JSON.stringify(form.values.email, form.values.password),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-    );
-      console.log(JSON.stringify(response?.data));
+      //console.log(form.values.email, form.values.password)
+      //const json = JSON.stringify({ email: email, password: password });
+      //const response = await axios.get(LOGIN_URL, { email: email, password: password });
 
-    } catch (error) {
-      
+      console.log("Uela:" + form.values.email + form.values.password);
+      const emailProva = form.values.email;
+      const pwdProva = form.values.password;
+
+      const response = await axios.post(
+        LOGIN_URL,
+        JSON.stringify({emailProva, pwdProva}),
+        {
+          headers: { "Content-Type": "application/json"},
+          withCredentials: true,
+        }
+      );
+      console.log("Uscito success");
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      //setAuth({ user, pwd, roles, accessToken });
+      //setEmail("");
+      //setPwd("");
+      setSuccess(true);
+    } catch (err) {
+      if (!err?.response) {
+        //setErrMsg("No Server Response");
+        console.log("No Server Response");
+      } else if (err.response?.status === 400) {
+        //setErrMsg("Missing Username or Password");
+        console.log("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        //setErrMsg("Unauthorized");
+        console.log("Unauthorized");
+      } else {
+        //setErrMsg("Login Failed");
+        console.log("Login Failed");
+      }
+      //errRef.current.focus();
     }
-  }
+  };
 
   return (
     <Center>
@@ -68,7 +94,7 @@ export function Login(props) {
           Macropad {type}:
         </Text>
 
-        <form onSubmit={submitHandler}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
             {type === "register" && (
               <TextInput

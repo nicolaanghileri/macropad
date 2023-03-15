@@ -1,13 +1,12 @@
 //Express
 import express from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
+//import morgan from 'morgan'; logging
 import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
 import userRouter from './routes/auth.js';
-import testRouter from './routes/test.js';
 
 //Environment configuration
 dotenv.config();
@@ -39,7 +38,6 @@ app.use(
 
 
 app.use(BASE_URL, userRouter);
-app.use(BASE_URL, testRouter);
 
 //routes + routers
 //app.use(morgan());
