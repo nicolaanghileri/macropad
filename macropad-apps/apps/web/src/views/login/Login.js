@@ -16,7 +16,14 @@ import {
   Center,
 } from "@mantine/core";
 
+import { handleLogin, handleRegister } from "../../utils/authHandler"; 
+
 import axios from "../../api/axios";
+<<<<<<< Updated upstream
+=======
+const LOGIN_URL = "auth/login";
+const REGISTER_URL = "auth/register";
+>>>>>>> Stashed changes
 
 export function Login(props) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -41,6 +48,7 @@ export function Login(props) {
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
+<<<<<<< Updated upstream
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -60,6 +68,76 @@ export function Login(props) {
       
     }
   }
+=======
+  const handleSubmit = async (e) => {
+    if(type === "login") {
+      try {
+        const json = JSON.stringify({email: form.values.email, password: form.values.password});
+        const response = await axios.post(LOGIN_URL, json, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("Uscito success");
+        //const accessToken = response?.data?.accessToken;
+        //const roles = response?.data?.roles;
+        //setAuth({ user, pwd, roles, accessToken });
+        //setEmail("");
+        //setPwd("");
+        //setSuccess(true);
+      } catch (err) {
+        console.log(err);
+        if (!err?.response) {
+          //setErrMsg("No Server Response");
+          console.log("No Server Response");
+        } else if (err.response?.status === 400) {
+          //setErrMsg("Missing Username or Password");
+          console.log("Missing Username or Password");
+        } else if (err.response?.status === 401) {
+          //setErrMsg("Unauthorized");
+          console.log("Unauthorized");
+        } else {
+          //setErrMsg("Login Failed");
+          console.log("Login Failed");
+        }
+        //errRef.current.focus();
+      }
+    }else if(type === "register") {
+      try {
+        const json = JSON.stringify({email: form.values.email, password: form.values.password});
+        const response = await axios.post(REGISTER_URL, json, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("Uscito success");
+        //const accessToken = response?.data?.accessToken;
+        //const roles = response?.data?.roles;
+        //setAuth({ user, pwd, roles, accessToken });
+        //setEmail("");
+        //setPwd("");
+        //setSuccess(true);
+      } catch (err) {
+        console.log(err);
+        if (!err?.response) {
+          //setErrMsg("No Server Response");
+          console.log("No Server Response");
+        } else if (err.response?.status === 400) {
+          //setErrMsg("Missing Username or Password");
+          console.log("Missing Username or Password");
+        } else if (err.response?.status === 401) {
+          //setErrMsg("Unauthorized");
+          console.log("Unauthorized");
+        } else {
+          //setErrMsg("Login Failed");
+          console.log("Login Failed");
+        }
+        //errRef.current.focus();
+      }
+    }
+
+  };
+>>>>>>> Stashed changes
 
   return (
     <Center>
@@ -70,17 +148,6 @@ export function Login(props) {
 
         <form onSubmit={submitHandler}>
           <Stack>
-            {type === "register" && (
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
-                }
-              />
-            )}
-
             <TextInput
               required
               label="Email"

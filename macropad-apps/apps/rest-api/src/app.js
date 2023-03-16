@@ -6,8 +6,12 @@ import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
+<<<<<<< Updated upstream
 import userRouter from './routes/auth.js';
 import testRouter from './routes/test.js';
+=======
+import authRouter from './routes/auth.js';
+>>>>>>> Stashed changes
 
 //Environment configuration
 dotenv.config();
@@ -25,7 +29,13 @@ if(BASE_URL == undefined) {
 console.log("BASEURL: " + BASE_URL);
 
 //middlewares
-app.use(cors());
+const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -38,8 +48,12 @@ app.use(
 // ... (mid per i log / autenticazione)
 
 
+<<<<<<< Updated upstream
 app.use(BASE_URL, userRouter);
 app.use(BASE_URL, testRouter);
+=======
+app.use(BASE_URL, authRouter);
+>>>>>>> Stashed changes
 
 //routes + routers
 //app.use(morgan());
