@@ -10,11 +10,7 @@ const mainRoute = "/auth";
 
 //Working route for user login
 // TODO - Logging and response statuses
-<<<<<<< Updated upstream
-router.get(mainRoute, async (req, res) => {
-=======
 router.post(mainRoute + "/login", async (req, res) => {
->>>>>>> Stashed changes
   if(!req.body.email || !req.body.password){
     res.status(400).json({message: "Uncomplete request"});
   }
@@ -34,11 +30,7 @@ router.post(mainRoute + "/login", async (req, res) => {
 
 //Working route for user + api_key creation
 // TODO - Logging and response statuses
-<<<<<<< Updated upstream
-router.post(mainRoute, async (req, res) => {
-=======
 router.post(mainRoute + "/register", async (req, res) => {
->>>>>>> Stashed changes
   if(!req.body.email || !req.body.password){ 
     res.status(400).json({message: "Uncomplete request"});
   }
