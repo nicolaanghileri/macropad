@@ -24,7 +24,13 @@ if(BASE_URL == undefined) {
 console.log("BASEURL: " + BASE_URL);
 
 //middlewares
-app.use(cors());
+const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -37,7 +43,7 @@ app.use(
 // ... (mid per i log / autenticazione)
 
 
-app.use(BASE_URL, userRouter);
+app.use(BASE_URL, authRouter);
 
 //routes + routers
 //app.use(morgan());

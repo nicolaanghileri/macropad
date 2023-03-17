@@ -5,22 +5,23 @@ import {
 } from "../utils/connector.js";
 
 const router = Router();
-const mainRoute = "/user";
+const mainRoute = "/auth";
 
 //Working route for user login
 // TODO - Logging and response statuses
-router.post(mainRoute, async (req, res) => {
-  console.log(req.body.email, req.body.password);
+router.post(mainRoute + "/login", async (req, res) => {
   if(!req.body.email || !req.body.password){
     res.status(400).json({message: "Uncomplete request"});
   }
   try{
     if(await checkLogin(req.body.email, req.body.password)){
+      //console.log("Successful");
       res.status(200).json({message: "Login successful"});
+    }else{
+      res.status(401).json({message: "Login failed"});
     }
-    res.status(400).json({message: "Login failed"});
-   
   }catch(err){
+    console.log(err);
   }
 });
 
@@ -28,9 +29,7 @@ router.post(mainRoute, async (req, res) => {
 
 //Working route for user + api_key creation
 // TODO - Logging and response statuses
-
-/*
-router.post(mainRoute, async (req, res) => {
+router.post(mainRoute + "/register", async (req, res) => {
   if(!req.body.email || !req.body.password){ 
     res.status(400).json({message: "Uncomplete request"});
   }
@@ -41,5 +40,4 @@ router.post(mainRoute, async (req, res) => {
     res.status(400).json({message: err});
   }
 });
-*/
 export default router;

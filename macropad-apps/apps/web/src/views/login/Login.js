@@ -16,8 +16,12 @@ import {
   Center,
 } from "@mantine/core";
 
+import { handleLogin, handleRegister } from "../../utils/authHandler"; 
+
 import axios from "../../api/axios";
-const LOGIN_URL = "user";
+
+const LOGIN_URL = "auth/login";
+const REGISTER_URL = "auth/register";
 
 export function Login(props) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -85,8 +89,9 @@ export function Login(props) {
       }
       //errRef.current.focus();
     }
-  };
+  }
 
+  
   return (
     <Center>
       <Paper shadow="xs" radius="xs" p="xl" withBorder {...props}>
@@ -96,17 +101,6 @@ export function Login(props) {
 
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
-            {type === "register" && (
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
-                }
-              />
-            )}
-
             <TextInput
               required
               label="Email"

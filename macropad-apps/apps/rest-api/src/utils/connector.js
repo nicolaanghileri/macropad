@@ -45,7 +45,6 @@ const checkLogin = async(email, password) => {
     const user = await prisma.user.findUnique({
         where: {email: email},
     });
-
     return await bcrypt.compare(password, user.password);
 }
 

@@ -29,6 +29,9 @@ function App() {
 
   return (
     <div>
+      { isLogged == null && (
+        <LoginForm></LoginForm>
+      )}
       <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
         <AppShell navbar={<Nav></Nav>}>
           <Route path="/sharings" component={Sharing}>Sharing</Route>
