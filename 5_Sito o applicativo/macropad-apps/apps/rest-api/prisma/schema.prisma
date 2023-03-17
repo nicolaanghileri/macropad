@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int             @id @default(autoincrement())
+  email      String?         @db.VarChar(319)
+  password   String?         @db.VarChar(64)
+  api_keys   Api_keys[]
+  user_macro MacrosOnUsers[]
+
+  @@map("user")
+}
+
+model Macro {
+  id         Int             @id @default(autoincrement())
+  nome       String?         @db.VarChar(25)
+  createdAt  DateTime        @default(now()) @db.Timestamp(0)
+  version    Int?            @db.TinyInt
+  app_id     Int?
+  app        App?            @relation(fields: [app_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "macro_ibfk_1")
+  user_macro MacrosOnUsers[]
+
+  @@index([app_id], map: "app_id")
+  @@map("macro")
+}
+
+model MacrosOnUsers {
+  user_id  Int
+  macro_id Int
+  user     User  @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "user_macro_ibfk_1")
+  macro    Macro @relation(fields: [macro_id], references: [id], onUpdate: Restrict, map: "user_macro_ibfk_2")
+
+  @@id([user_id, macro_id])
+  @@index([macro_id], map: "macro_id")
+  @@map("user_macro")
+}
+
+model App {
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(25)
+  exe   String? @db.VarChar(45)
+  macro Macro[]
+
+  @@map("app")
+}
+
+model Device {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(25) @unique
+  status      String?   @db.VarChar(25)
+  api_keys_id Int?      @unique(map: "api_keys_id")
+  api_keys    Api_keys? @relation(fields: [api_keys_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "device_ibfk_2")
+
+  @@map("device")
+}
+
+model Api_keys {
+  id        Int      @id @default(autoincrement())
+  api_key   String?  @db.VarChar(128)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  user_id   Int?
+  user      User?    @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "api_keys_ibfk_1")
+  device    Device?
+
+  @@index([user_id], map: "user_id")
+  @@map("api_keys")
+}
