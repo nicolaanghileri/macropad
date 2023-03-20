@@ -1,17 +1,12 @@
 //Express
 import express from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
+//import morgan from 'morgan'; logging
 import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
-<<<<<<< Updated upstream
-import userRouter from './routes/auth.js';
-import testRouter from './routes/test.js';
-=======
 import authRouter from './routes/auth.js';
->>>>>>> Stashed changes
 
 //Environment configuration
 dotenv.config();
@@ -31,7 +26,7 @@ console.log("BASEURL: " + BASE_URL);
 //middlewares
 const corsOptions ={
   origin:'http://localhost:3000', 
-  credentials:true,            //access-control-allow-credentials:true
+  credentials:true,               //access-control-allow-credentials:true
   optionSuccessStatus:200
 }
 
@@ -46,14 +41,7 @@ app.use(
 
 // tuoi middlewares
 // ... (mid per i log / autenticazione)
-
-
-<<<<<<< Updated upstream
-app.use(BASE_URL, userRouter);
-app.use(BASE_URL, testRouter);
-=======
 app.use(BASE_URL, authRouter);
->>>>>>> Stashed changes
 
 //routes + routers
 //app.use(morgan());
