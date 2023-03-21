@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 
 //import all routes from ./routes/...
-import userRouter from './routes/auth.js';
+import authRouter from './routes/auth.js';
 
 //Environment configuration
 dotenv.config();
@@ -26,7 +26,7 @@ console.log("BASEURL: " + BASE_URL);
 //middlewares
 const corsOptions ={
   origin:'http://localhost:3000', 
-  credentials:true,            //access-control-allow-credentials:true
+  credentials:true,               //access-control-allow-credentials:true
   optionSuccessStatus:200
 }
 
@@ -41,8 +41,6 @@ app.use(
 
 // tuoi middlewares
 // ... (mid per i log / autenticazione)
-
-
 app.use(BASE_URL, authRouter);
 
 //routes + routers

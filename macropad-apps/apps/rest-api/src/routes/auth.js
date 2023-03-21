@@ -15,10 +15,9 @@ router.post(mainRoute + "/login", async (req, res) => {
   }
   try{
     if(await checkLogin(req.body.email, req.body.password)){
-      //console.log("Successful");
-      res.status(200).json({message: "Login successful"});
+      res.status(200).json({"message": "Login successful", "email": req.body.email, "success": true});
     }else{
-      res.status(401).json({message: "Login failed"});
+      res.status(401).json({message: "Login failed", success: false});
     }
   }catch(err){
     console.log(err);

@@ -14,14 +14,11 @@ import {
   Anchor,
   Stack,
   Center,
+  filterProps,
 } from "@mantine/core";
 
-import { handleLogin, handleRegister } from "../../utils/authHandler"; 
-
-import axios from "../../api/axios";
-
-const LOGIN_URL = "auth/login";
-const REGISTER_URL = "auth/register";
+import AuthProvider from "../../services/AuthProvider";
+import { Link, Route, Redirect, Router } from "wouter";
 
 export function Login(props) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -44,54 +41,34 @@ export function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const handleSubmit = async (e) => {
-    //e.preventDefault();
-
-    try {
-      //console.log(form.values.email, form.values.password)
-      //const json = JSON.stringify({ email: email, password: password });
-      //const response = await axios.get(LOGIN_URL, { email: email, password: password });
-
-      console.log("Uela:" + form.values.email + form.values.password);
-      const emailProva = form.values.email;
-      const pwdProva = form.values.password;
-
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({emailProva, pwdProva}),
-        {
-          headers: { "Content-Type": "application/json"},
-          withCredentials: true,
-        }
-      );
-      console.log("Uscito success");
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      //setAuth({ user, pwd, roles, accessToken });
-      //setEmail("");
-      //setPwd("");
-      setSuccess(true);
-    } catch (err) {
-      if (!err?.response) {
-        //setErrMsg("No Server Response");
-        console.log("No Server Response");
-      } else if (err.response?.status === 400) {
-        //setErrMsg("Missing Username or Password");
-        console.log("Missing Username or Password");
-      } else if (err.response?.status === 401) {
-        //setErrMsg("Unauthorized");
-        console.log("Unauthorized");
-      } else {
-        //setErrMsg("Login Failed");
-        console.log("Login Failed");
-      }
-      //errRef.current.focus();
-    }
+  const [success, setSuccess] = useState(false)
+  
+  const red = () => {
+    return (
+      <Redirect to={'/home'} />
+    )
   }
 
-  
+  const handleSubmit = async (e) => {
+    if (type === "login") {
+      const response = await AuthProvider.login(form.values.email, form.values.password);
+      if(response.email){
+        console.log(localStorage.getItem('user'));
+        window.location.href = '/home'
+        //window.location.reload();
+      }else{
+        console.log("error");
+      }
+    } else {
+      const response = await AuthProvider.register(form.values.email, form.values.password); 
+      if(response.status == 200){
+        console.log("success");
+      }else{
+        console.log("error");
+      }
+    }
+  };
+
   return (
     <Center>
       <Paper shadow="xs" radius="xs" p="xl" withBorder {...props}>

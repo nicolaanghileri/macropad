@@ -3,42 +3,33 @@ import './App.css';
 
 //Importing views forms (route views)
 import LoginForm, { Login } from './views/login/Login.js'
-import Sharing from './views/share/Sharing.js'
-import Nav from './components/navbar/Navbar.js';
+import ShareForm, {Share} from './views/share/Sharing';
+import HomeForm, {Home} from './views/Home.js';
+import Nav from './components/navbar/Navbar';
 
 //Import utils
-import { Link, Route } from "wouter";
+import { Link, Route, Redirect, Router } from "wouter";
 import { AppShell, MantineProvider } from '@mantine/core';
-import { useCookies } from "react-cookie";
 
+//Auth hook for Conditional Rendering
+import { useAuth } from './hooks/useAuth';
+
+
+function ConditionalRender() {
+  const logged = useAuth == null ? false : true;
+  if (logged) {
+    return <LoginForm />;
+  }
+  return <HomeForm />;
+}
 
 
 function App() {
-
-  const [cookies, setCookie] = useCookies(["user"]);
-
-  function handleCookie() {
-    setCookie("user", "gowtham", {
-      path: "/"
-    });
-  }
-
-  function isLogged(){
-    return cookies.user || null;
-  }
-
+  console.log(localStorage.getItem('user'));
   return (
     <div>
-      { isLogged == null && (
-        <LoginForm></LoginForm>
-      )}
       <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-        <AppShell navbar={<Nav></Nav>}>
-          <Route path="/sharings" component={Sharing}>Sharing</Route>
-          <Route path="/mymacro" component={LoginForm}>My macros</Route>
-          <Route path="/myaccount" component={LoginForm}>My Account</Route>
-          <Route path="/dashboard" component={LoginForm} >Macro Dashboard</Route>
-        </AppShell>
+          <ConditionalRender></ConditionalRender>
       </MantineProvider>
     </div>
   );
