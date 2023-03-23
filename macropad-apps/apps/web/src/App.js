@@ -18,7 +18,7 @@ import { useAuth } from './hooks/useAuth';
 
 function ConditionalRender() {
   const auth = useAuth();
-  if(auth == "null"){
+  if(auth == null){
     return <LoginForm />;
   }else{
     return (
