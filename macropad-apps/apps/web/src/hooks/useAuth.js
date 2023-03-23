@@ -1,3 +1,3 @@
 import AuthProvider from "../services/AuthProvider";
 
-export const useAuth = () => {return "" + AuthProvider.getCurrentUser();}
+export const useAuth = () => {return AuthProvider.getCurrentUser();}
