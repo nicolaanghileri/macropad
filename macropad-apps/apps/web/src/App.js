@@ -4,7 +4,8 @@ import './App.css';
 //Importing views forms (route views)
 import LoginForm, { Login } from './views/login/Login.js'
 import ShareForm, {Share} from './views/share/Sharing';
-import HomeForm, {Home} from './views/Home.js';
+import HomeForm, {Home} from './views/home/Home';
+import LogoutForm, {Logout} from './views/logout/Logout';
 import Nav from './components/navbar/Navbar';
 
 //Import utils
@@ -16,11 +17,18 @@ import { useAuth } from './hooks/useAuth';
 
 
 function ConditionalRender() {
-  const logged = useAuth == null ? false : true;
-  if (logged) {
+  const auth = useAuth();
+  if(auth == "null"){
     return <LoginForm />;
+  }else{
+    return (
+      <AppShell navbar={<Nav username={auth}></Nav>}>
+        <Route path="/dashboard" component={LoginForm}></Route>
+        <Route path="/home" component={HomeForm}></Route>
+        <Route path="/logout"></Route>
+      </AppShell>
+    )
   }
-  return <HomeForm />;
 }
 
 
