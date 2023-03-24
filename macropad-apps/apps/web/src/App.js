@@ -1,35 +1,42 @@
 //Importing app styles
-import './App.css';
+import "./App.css";
 
 //Importing views forms (route views)
-import LoginForm, { Login } from './views/login/Login.js'
-import ShareForm, {Share} from './views/share/Sharing';
-import HomeForm, {Home} from './views/Home.js';
-import Nav from './components/navbar/Navbar';
+import LoginForm, { Login } from "./views/login/Login.js";
+import ShareForm, { Share } from "./views/share/Sharing";
+import HomeForm, { Home } from "./views/home/Home";
+import MacroDashboard from "./views/macros/MacroDashboard";
+import MacroCreation from "./views/macros/MacroCreation";
+import Nav from "./components/navbar/Navbar";
 
 //Import utils
-import { Link, Route, Redirect, Router } from "wouter";
-import { AppShell, MantineProvider } from '@mantine/core';
+import { Link, Route, Redirect, Router, Switch } from "wouter";
+import { AppShell, MantineProvider } from "@mantine/core";
 
 //Auth hook for Conditional Rendering
-import { useAuth } from './hooks/useAuth';
-
-
-function ConditionalRender() {
-  const logged = useAuth == null ? false : true;
-  if (logged) {
-    return <LoginForm />;
-  }
-  return <HomeForm />;
-}
-
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  console.log(localStorage.getItem('user'));
+  const user = useAuth();
   return (
     <div>
-      <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-          <ConditionalRender></ConditionalRender>
+      <MantineProvider
+        theme={{ colorScheme: "dark" }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        {user ? (
+          <AppShell navbar={<Nav username={user}/>}>
+            <Switch>
+              <Route path="/dashboard" component={MacroDashboard}/>
+              <Route path="/home" component={HomeForm}/>
+              <Route path="/creation" component={MacroCreation}/>
+              <Route path="/logout"/>
+            </Switch>
+          </AppShell>
+        ) : (
+          <LoginForm />
+        )}
       </MantineProvider>
     </div>
   );

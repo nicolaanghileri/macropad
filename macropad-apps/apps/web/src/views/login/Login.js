@@ -50,12 +50,13 @@ export function Login(props) {
   }
 
   const handleSubmit = async (e) => {
+    console.log(e);
+    //e.preventDefault();
     if (type === "login") {
       const response = await AuthProvider.login(form.values.email, form.values.password);
       if(response.email){
-        console.log(localStorage.getItem('user'));
-        window.location.href = '/home'
-        //window.location.reload();
+        //console.log(localStorage.getItem('user'));
+        window.location.href = '/home';
       }else{
         console.log("error");
       }
