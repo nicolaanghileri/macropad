@@ -5,7 +5,8 @@ import "./App.css";
 import LoginForm, { Login } from "./views/login/Login.js";
 import ShareForm, { Share } from "./views/share/Sharing";
 import HomeForm, { Home } from "./views/home/Home";
-import LogoutForm, { Logout } from "./views/logout/Logout";
+import MacroDashboard from "./views/macros/MacroDashboard";
+import MacroCreation from "./views/macros/MacroCreation";
 import Nav from "./components/navbar/Navbar";
 
 //Import utils
@@ -27,8 +28,9 @@ function App() {
         {user ? (
           <AppShell navbar={<Nav username={user}/>}>
             <Switch>
-              <Route path="/dashboard" component={LoginForm}/>
+              <Route path="/dashboard" component={MacroDashboard}/>
               <Route path="/home" component={HomeForm}/>
+              <Route path="/creation" component={MacroCreation}/>
               <Route path="/logout"/>
             </Switch>
           </AppShell>
