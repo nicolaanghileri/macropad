@@ -8,6 +8,7 @@ import HomeForm, { Home } from "./views/home/Home";
 import MacroDashboard from "./views/macros/MacroDashboard";
 import MacroCreation from "./views/macros/MacroCreation";
 import Nav from "./components/navbar/Navbar";
+import MyAccount from "./views/myAccount/MyAccount";
 
 //Import utils
 import { Link, Route, Redirect, Router, Switch } from "wouter";
@@ -15,6 +16,7 @@ import { AppShell, MantineProvider } from "@mantine/core";
 
 //Auth hook for Conditional Rendering
 import { useAuth } from "./hooks/useAuth";
+
 
 function App() {
   const user = useAuth();
@@ -31,6 +33,7 @@ function App() {
               <Route path="/dashboard" component={MacroDashboard}/>
               <Route path="/home" component={HomeForm}/>
               <Route path="/creation" component={MacroCreation}/>
+              <Route path="/myaccount" component={MyAccount}/>
               <Route path="/logout"/>
             </Switch>
           </AppShell>
