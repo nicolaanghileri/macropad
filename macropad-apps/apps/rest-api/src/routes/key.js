@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import bcrypt from 'bcrypt';
+import { getAllKeys } from '../utils/connector_key.js';
 
 import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
@@ -7,7 +8,19 @@ const prisma = new PrismaClient();
 const router = Router();
 const mainRoute = '/key';
 
+router.get(mainRoute + "/:email", async (req, res) => {
+    try{
+        console.log(req.params.email)
+        const data = await getAllKeys(req.params.email);
+        console.log(data)
+        res.status(200).json({keys: data});
+    }catch(err){
+        console.log(err);
+        res.status(401).json({message: "ERRROOOOOOR"});
+    }
+});
 
+/*
 //First time a device tryies to access rest api to register himself
 router.post(mainRoute, async (req,res) => {
     //request body parsing
@@ -97,6 +110,5 @@ router.put(mainRoute, async(res,req) =>{
     }
 });
 
-
-
+*/
 export default router;

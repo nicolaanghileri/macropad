@@ -7,7 +7,8 @@ import dotenv from 'dotenv';
 
 //import all routes from ./routes/...
 import authRouter from './routes/auth.js';
-
+import keyRouter from './routes/key.js';
+import socketRouter from './routes/socket.js';
 //Environment configuration
 dotenv.config();
 
@@ -42,7 +43,8 @@ app.use(
 // tuoi middlewares
 // ... (mid per i log / autenticazione)
 app.use(BASE_URL, authRouter);
-
+app.use(BASE_URL, keyRouter);
+app.use(BASE_URL, socketRouter);
 //routes + routers
 //app.use(morgan());
 

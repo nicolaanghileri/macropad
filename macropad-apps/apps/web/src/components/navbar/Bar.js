@@ -26,6 +26,11 @@ const Bar = (props) => {
         </Link>
       </Grid.Col>
       <Grid.Col>
+        <Link href="/myaccount">
+          <SmallButton content="My Account"></SmallButton>
+        </Link>
+      </Grid.Col>
+      <Grid.Col>
         <Link href="/home">
           <SmallButton content="Home"></SmallButton>
         </Link>
