@@ -79,7 +79,6 @@ if __name__ == "__main__":
     # Creazione dei thread
     thread_get_process = threading.Thread(target=get_process)
     thread_send_data = threading.Thread(target=send_data)
-
     thread_tray = threading.Thread(target=send_data)
 
     # Avvio dei thread

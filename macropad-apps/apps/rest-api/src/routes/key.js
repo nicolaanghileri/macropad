@@ -9,16 +9,15 @@ const router = Router();
 const mainRoute = '/key';
 
 router.get(mainRoute + "/:email", async (req, res) => {
-    //Check if key for request is valid.
-    //IF valid:
     try{
-        const email = req.params.email;
-        res.json(await getAllKeys(email));
+        console.log(req.params.email)
+        const data = await getAllKeys(req.params.email);
+        console.log(data)
+        res.status(200).json({keys: data});
     }catch(err){
-        res.status(400);
+        console.log(err);
+        res.status(401).json({message: "ERRROOOOOOR"});
     }
-
-
 });
 
 /*

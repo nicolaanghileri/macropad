@@ -13,7 +13,6 @@ import MyAccount from "./views/myAccount/MyAccount";
 //Import utils
 import { Link, Route, Redirect, Router, Switch } from "wouter";
 import { AppShell, MantineProvider } from "@mantine/core";
-
 //Auth hook for Conditional Rendering
 import { useAuth } from "./hooks/useAuth";
 
