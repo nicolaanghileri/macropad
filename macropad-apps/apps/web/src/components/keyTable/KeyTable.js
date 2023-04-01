@@ -6,36 +6,6 @@ import axios from "../../services/axios";
 import { useAuth } from "../../hooks/useAuth";
 const KEY_URL = "/key/";
 
-function PopUP() {
-  const [opened, { close, open }] = useDisclosure(false);
-  const [count, { increment, decrement }] = useCounter(3, { min: 0 });
-  const deletion = () => {};
-  return (
-    <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        size="auto"
-        title="Watch out!"
-      >
-        <Text>Are you sure you want to delete this key?</Text>
-
-        <Group mt="xl">
-          <Button variant="outline" onClick={increment}>
-            Go back
-          </Button>
-          <Button color="red" onClick={deletion}>
-            Delte
-          </Button>
-        </Group>
-      </Modal>
-      <Group position="center">
-        <Button onClick={open}>Open modal</Button>
-      </Group>
-    </>
-  );
-}
-
 const useStyles = createStyles((theme) => ({
   header: {
     position: "sticky",
@@ -64,9 +34,11 @@ function KeyTable() {
   const [data, setData] = useState([]);
   const email = useAuth();
   const [opened, { close, open }] = useDisclosure(false);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     const payload = JSON.stringify(email);
+    console.log("payload email: " + payload);
     axios
       .get(KEY_URL + email, payload, {
         headers: {
@@ -82,6 +54,33 @@ function KeyTable() {
       });
   }, [email]);
 
+  const deletion = () => {
+    console.log("DELETION");
+    if (selected != null) {
+      console.log("Selected" + selected);
+      const payload = JSON.stringify(selected);
+      console.log(payload);
+      axios.delete(KEY_URL + "delete/" + selected, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log("Key Deleted");
+          setSelected(null);
+          //Fai partire notifica
+          close();
+          window.location.reload(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return;
+    }
+    console.log("Fuori log")
+    return;
+  };
+
   const rows = data.map((row) => (
     <tr key={row.id}>
       <td>{row.id}</td>
@@ -89,15 +88,12 @@ function KeyTable() {
       <td>{row.createdAt}</td>
       <td>{row.device || "Not connected"}</td>
       <td>
-        <Anchor component="button" fz="sm" onClick={open}>
+        <Anchor component="button" fz="sm" onClick={() => { open(); setSelected(row.id); }}>
           Delete
         </Anchor>
       </td>
     </tr>
   ));
-
-  /*TODOOOOOOOO*/
-  const deletion = () => {};
 
   return (
     <ScrollArea

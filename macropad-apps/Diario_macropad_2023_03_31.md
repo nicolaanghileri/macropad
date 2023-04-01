@@ -1,41 +1,26 @@
 # Macropad - Diario di lavoro
 #### Nicola Anghileri
-### Trevano, 31 Marzo 2023
+### Trevano, 01 Aprile 2023
 
 ## Lavori svolti
 
 
 |Orario        |Lavoro                |
 |--------------|-----------------------------------------------------------------------------|
-|08:20-09:50   | Richiesta Axios per il display delle chiavi.                                |
-|10:05-11:35   | Discussione con il sore per i requisiti e sistemazione richiesta            |
-|12:30-14:00   | Lavoro sulla MyAccount page, adesso tutto funzionante tranne deletion della chiave.           |
+|12:00-14:00   | Implementazione eliminazione di una chiave e il suo device nella pagina MyAccount  
+|17:00-19:00   | Implementazione creazione di una chiave nella pagina MyAccount           |
+|19:00-xx:xx   | Applicazione python client: registrazione del device, inizio sviluppo idea lancio macro |
+|xx:xx-xx:xx   | Inizio documentazione dell' implementazione|
+
 
 ## Lavori:
-I lavori dell'applicativo sono suddivisi in 2 Thread:
-    - Thread 1: Detecting dell'applicazione on-top.
-    - Thread 2: Send dei dati verso la rest-api.
-
-Fatto funzionanate.
-<br>
-Aggiunta la system tray per la gestione del programma:
-    - Exit -> Chiude il programma
-    - Configuration -> Apre il file di conf con l'app default di windows
-    - TODO: Pause -> Pausa l'applicazione
 
 ##  Problemi riscontrati e soluzioni adottate
-Problema iniziale:<br></br>
-I dati ritornati dalla rest-api non erano corretti perchè, 
-l'email passata per eseguire la query era di tipo undefined.
-C'è stato un errore da parte mia, leggevo ```req.body.email``` al posto di leggere ```req.props.email```
-<br></br>
-Secondo problema:
-<br></br>
-il mapping dei dati, per poi mostrarli all'interno della tabella non funziona, non riesco a capire perchè ma il metodo ```JSON.parse(req.body)``` ritorna un errore dicendo che req.body è ANONIMUS. 
-La lettura singola del contenuto funziona infatti posso loggare con ```JSON.stringify()``` e visualizzare il contenuto, quindi dovrebbe essere facile da risolvere adesso.
-
-Sistemato tutti i problemi utilizzando ```JSON.stringify()``` direttamente, dopodiché con il map se ne occupava JS a ordinare il tutto. 
-Tabella viene mostrata.
+Ci sono continui problemi con la connessione axios verso la rest-api, problemi che tolgono sempre tanto tempo di lavoro.
+Il body-parsing a lato della rest-api mi da problemi e non capisco dove sia il problema.
+<br>
+Per risolvere il problema adesso lavoro con le routes parametrizzate, quindi passo le informazioni come parametri delle route,
+e non nel body.
 
 ## Punto della situazione rispetto alla pianificazione
 In ritardo.

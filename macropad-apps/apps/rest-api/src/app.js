@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 //import morgan from 'morgan'; logging
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 
 
 //import all routes from ./routes/...
@@ -30,6 +31,9 @@ const corsOptions ={
   credentials:true,               //access-control-allow-credentials:true
   optionSuccessStatus:200
 }
+
+app.use(bodyParser.json()); // parse JSON request bodies
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
 app.use(express.json());

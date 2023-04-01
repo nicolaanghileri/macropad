@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import bcrypt from 'bcrypt';
-import { getAllKeys } from '../utils/connector_key.js';
+import { getAllKeys, deleteKey, createKey } from '../utils/connector_key.js';
 
 import {PrismaClient} from "@prisma/client"
 const prisma = new PrismaClient();
@@ -10,13 +10,34 @@ const mainRoute = '/key';
 
 router.get(mainRoute + "/:email", async (req, res) => {
     try{
-        console.log(req.params.email)
         const data = await getAllKeys(req.params.email);
-        console.log(data)
         res.status(200).json({keys: data});
     }catch(err){
         console.log(err);
         res.status(401).json({message: "ERRROOOOOOR"});
+    }
+});
+
+
+router.delete(mainRoute + "/delete/:id", async (req, res) => {
+    try{
+        console.log("ID to delete:" + req.params.id);
+        await deleteKey(Number(req.params.id));
+        res.status(200).json({message: "Key and assoc device deleted."});
+    }catch(err){
+        console.log("error");
+        res.status(400).json({message: err.toString()});
+    }
+});
+
+router.post(mainRoute + "/create/:email", async (req, res) => {
+    try{
+        console.log("entered key/create route with email: " + req.body.email);
+        await createKey(req.params.email);
+        res.status(200).json({message: "Succesfuly created key for user xy"});
+    }catch(error){
+        console.log("Error: "+ error);
+        res.status(400).json({message: err.toString()});
     }
 });
 
